@@ -1,31 +1,31 @@
-# BRACNAV
-BRACNAV (BRAc Copy Number Alteration Viewer)  is a new tool for calling copy number variations (CNVs) in BRCA1 and BRCA2 genes. 
+# BRACNAC
+BRACNAC (BRAc Copy Number Alteration Viewer)  is a new tool for calling copy number variations (CNVs) in BRCA1 and BRCA2 genes. 
 ## Installation
 ### Installation from .zip file
-* Download [last BRACNAV release](https://github.com/aakechin/BRACNAV.zip):
+* Download [last BRACNAC release](https://github.com/aakechin/BRACNAC.zip):
 * Unzip:
  ```
-unzip BRACNAV.zip
-cd BRACNAV
+unzip BRACNAC.zip
+cd BRACNAC
  ```
 ### Installation from github
 ```
-git clone  https://github.com/aakechin/BRACNAV.git
-cd BRACNAV
+git clone  https://github.com/aakechin/BRACNAC.git
+cd BRACNAC
 ```
 ## Usage
 ### Windows 7/10
-Run executable file **BRACNAV.exe**
+Run executable file **BRACNAC.exe**
 ### Ubuntu
 To use graphical interface run:
 ```
-python3 main_BRACNAV.py
+python3 main_BRACNAC.py
 ```
 or in command-line version:
 ```
-python bracnav.py -in file_with_coverage.csv -af file_with_coordinates.csv -out output_file
+python bracnac.py -in file_with_coverage.csv -af file_with_coordinates.csv -out output_file
 ```
-BRACNAV can be used with graphical interface or in command-line version. As an input files both versions use:
+BRACNAC can be used with graphical interface or in command-line version. As an input files both versions use:
 * Tab-separated file (TSV) with coverage for each target region (see the detailed description below).
 * TSV-file with coordinates for each target region. They should correspond to target regions of the coverage file.
 
