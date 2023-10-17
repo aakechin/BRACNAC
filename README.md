@@ -1,8 +1,8 @@
 # BRACNAC
-BRACNAC (BRAc Copy Number Alteration Viewer)  is a new tool for calling copy number variations (CNVs) in BRCA1 and BRCA2 genes. 
+BRACNAC (BRAc Copy Number Alteration Caller)  is a new tool for calling copy number variations (CNVs) and alterations (CNAs) in BRCA1 and BRCA2 genes. 
 ## Installation
 ### Installation from .zip file
-* Download [last BRACNAC release](https://github.com/aakechin/BRACNAC.zip):
+* Download [latest BRACNAC release](https://github.com/aakechin/BRACNAC.zip):
 * Unzip:
  ```
 unzip BRACNAC.zip
