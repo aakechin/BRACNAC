@@ -1,4 +1,4 @@
-# This script outputs results for BRACNAV
+# This script outputs results for BRACNAC
 
 import xlsxwriter as xls
 

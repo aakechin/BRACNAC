@@ -1,4 +1,4 @@
-# This script reads input file for BRACNAV
+# This script reads input file for BRACNAC
 
 import os
 import statistics as stat
@@ -36,6 +36,8 @@ def readInputFile(inputFile,outFile,
     data=[]
     # Stores, if the input file contains patient info
     withPatIDs=False
+    # Stores, if the input file contains uniformity
+    withUniformity=False
     for string in file:
         cols=string.replace('\n','').split('\t')
         # If it is the 1st string
@@ -43,7 +45,11 @@ def readInputFile(inputFile,outFile,
             'Patient_Num' in string):
             # Save column names
             if 'Patient_ID' in cols:
-                colNames=cols[0:1]+cols[5:]
+                if 'Uniformity' in cols:
+                    colNames=cols[0:1]+cols[6:]
+                    withUniformity=True
+                else:
+                    colNames=cols[0:1]+cols[5:]
                 withPatIDs=True
             else:
                 colNames=cols[:]
@@ -52,7 +58,10 @@ def readInputFile(inputFile,outFile,
         patNames.append(cols[0])
         # Save all coverage values into the matrix
         if withPatIDs:
-            data.append(list(map(float,cols[5:])))
+            if withUniformity:
+                data.append(list(map(float,cols[6:])))
+            else:
+                data.append(list(map(float,cols[5:])))
         else:
             data.append(list(map(float,cols[1:])))
     file.close()
