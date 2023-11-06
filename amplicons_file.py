@@ -72,10 +72,7 @@ def matchAmpliconsToExonsAndIntrons(amplicons,posToExon,prefix=100,
            amplNumCoordSortedToAmplName)
 
 def getAmpliconCoordinates(ampliconFile,posToExon1,posToExon2):
-    if ampliconFile:
-        file=open(ampliconFile)
-    else:
-        file=thisDir+'default_amplicons.csv'
+    file=open(ampliconFile)
     # Converts number of amplicon to number of multiplex
     amplToMults={}
     # Converts number of multiplex to number of amplicon
