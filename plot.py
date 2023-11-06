@@ -125,5 +125,6 @@ def showPlot(vals,text,colors,yperc,fileName,xticks1,xticks2):
     plt.tick_params(axis='y',labelsize=18,right='off')
     fig.tight_layout()
     plt.subplots_adjust(bottom=0.15)
-    plt.savefig(fileName)
+    plt.savefig(fileName,
+                dpi=300)
     plt.close()

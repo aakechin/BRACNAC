@@ -25,7 +25,7 @@ class BRACNAC(QObject):
                  refVersion,notClust,hardMinScore,
                  hardMaxPvalue,minScore,maxPvalue,minCov,
                  permNum,exonCoveredWhole,exonCoveredPart,exonNonCovered,
-                 delTh1,delTh2,duplTh1,duplTh2,delta):
+                 delTh1,delTh2,duplTh1,duplTh2):
         # Intialization, checking parameters
         super(BRACNAC,self).__init__()
         self.inFile=inFile
@@ -49,7 +49,6 @@ class BRACNAC(QObject):
         self.delTh2=delTh2
         self.duplTh1=duplTh1
         self.duplTh2=duplTh2
-        self.delta=delta
         
     def run(self):
         if self.refVersion not in ['hg19','hg38']:
@@ -251,8 +250,8 @@ if __name__=='__main__':
                      default=9.9,required=False)
     par.add_argument('--hard-pvalue-treshold','-hard_pvalue',
                      dest='hardMaxPvalue',type=float,
-                     help='maximal p-value for hard filtering mutations (default: 0.001)',
-                     default=0.001,required=False)
+                     help='maximal p-value for hard filtering mutations (default: 0.01)',
+                     default=0.01,required=False)
     par.add_argument('--score-treshold','-score',
                      dest='minScore',type=float,
                      help='minimal score for large rearrangement detection (default: 2)',
@@ -289,27 +288,22 @@ if __name__=='__main__':
     par.add_argument('--deletion-threshold2','-del2',
                      dest='delTh2',type=float,
                      help='normalized value of coverage for considering '
-                          'an amplicon as probably deleted (default: 1.8)',
+                          'an amplicon as probably deleted (default: 1.4)',
                      default=1.8,required=False)
     par.add_argument('--duplication-threshold1','-dupl1',
                      dest='duplTh1',type=float,
                      help='normalized value of coverage for considering '
-                          'an amplicon as likely duplicated (default: 2.7)',
+                          'an amplicon as likely duplicated (default: 2.8)',
                      default=2.7,required=False)
     par.add_argument('--duplication-threshold2','-dupl2',
                      dest='duplTh2',type=float,
                      help='normalized value of coverage for considering '
-                          'an amplicon as probably duplicated (default: 2.4)',
+                          'an amplicon as probably duplicated (default: 2.7)',
                      default=2.4,required=False)
-    par.add_argument('--delta','-delta',
-                     dest='delta',type=float,
-                     help='minimal relative difference between two values to be '
-                          'considered as significant (default: 0.05)',
-                     default=0.05,required=False)
     args=par.parse_args()
     bracnac=BRACNAC(args.inFile,args.ampliconFile,args.patFile,args.outFile,
                     args.refVersion,args.notClust,args.hardMinScore,args.hardMaxPvalue,
                     args.minScore,args.maxPvalue,args.minCov,args.permNum,
                     args.exonCoveredWhole,args.exonCoveredPart,args.exonNonCovered,
-                    args.delTh1,args.delTh2,args.duplTh1,args.duplTh2,args.delta) 
+                    args.delTh1,args.delTh2,args.duplTh1,args.duplTh2) 
     bracnac.run()

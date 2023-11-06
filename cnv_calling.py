@@ -260,13 +260,13 @@ def detect_CNVs(data3,
             if ','.join(deletedExons) not in ads:
                 ads.append(','.join(deletedExons))
                 adsScores.append(str(round(score,1)))
-                adsValues.append(str(round(pValue,6)))
+                adsValues.append(str(pValue))
                 bestAds.append(delEx)
-            elif (round(pValue,6)<float(adsValues[ads.index(','.join(deletedExons))]) or
-                  (round(pValue,6)==float(adsValues[ads.index(','.join(deletedExons))]) and
+            elif (pValue<float(adsValues[ads.index(','.join(deletedExons))]) or
+                  (pValue==float(adsValues[ads.index(','.join(deletedExons))]) and
                    round(score,1)>float(adsScores[ads.index(','.join(deletedExons))]))):
                 adsScores[ads.index(','.join(deletedExons))]=str(round(score,1))
-                adsValues[ads.index(','.join(deletedExons))]=str(round(pValue,6))
+                adsValues[ads.index(','.join(deletedExons))]=str(pValue)
             # Change color of deleted amplicons
             for ampl in amplNums:
                 ampliconsColor[ampl]='r'
@@ -292,8 +292,6 @@ def detect_CNVs(data3,
             if (len(insertedExons)>0 and 101 not in insertedExons):
                 if len(amplNums)==1 and len(insertedExons)>0:
                     score/=args.delTh1**2
-##                if len(amplNums)==len(insertedExons):
-##                    score/=args.delTh1
                 score/=args.delTh1**(1/len(insertedExons))
             dists=[]
             for k,amplNum in enumerate(amplNums):
@@ -328,13 +326,13 @@ def detect_CNVs(data3,
             if ','.join(insertedExons) not in ais:
                 ais.append(','.join(insertedExons))
                 aisScores.append(str(round(score,1)))
-                aisValues.append(str(round(pValue,6)))
+                aisValues.append(str(pValue))
                 bestAis.append(insEx)
-            elif (round(pValue,6)<float(aisValues[ais.index(','.join(insertedExons))]) or
-                  (round(pValue,6)==float(aisValues[ais.index(','.join(insertedExons))]) and
+            elif (pValue<float(aisValues[ais.index(','.join(insertedExons))]) or
+                  (pValue==float(aisValues[ais.index(','.join(insertedExons))]) and
                    round(score,1)>float(aisScores[ais.index(','.join(insertedExons))]))):
                 aisScores[ais.index(','.join(insertedExons))]=str(round(score,1))
-                aisValues[ais.index(','.join(insertedExons))]=str(round(pValue,6))
+                aisValues[ais.index(','.join(insertedExons))]=str(pValue)
             # Change color of amplified amplicons
             for ampl in amplNums:
                 ampliconsColor[ampl]='r'
@@ -479,6 +477,8 @@ def calc_pValue(patRow,
                 args):
     # Remove from patient values that correspond to the potential CNV
     patRow=np.delete(patRow,amplNums,None)
+    # Save amplCols shape before removing values (to calculate p-value later)
+    initAmplColSize=amplCols.shape[0]
     # Remove from the region set values that correspond to the potential CNV
     amplCols=np.delete(amplCols,sampleNum,0)
     # Correct indices because our current array doesn't include the current sample row
@@ -491,7 +491,7 @@ def calc_pValue(patRow,
     if amplCols.shape[0]==0 or amplCols.shape[1]==0:
         return(1)
     # Stores number of permutations with scores more than minimal acceptable score
-    score1=0
+    score1=1
     # Stores number of performed permutations
     permNum=0
     for i in range(permNum1): 
@@ -517,7 +517,7 @@ def calc_pValue(patRow,
                     moreThanThreshNum+=1
         # Divide the obtained score on the values depending on the length of CNV
         score/=args.delTh1**(moreThanThreshNum/len(amplNums))
-        if score>=minScore-args.delta*minScore:
+        if score>=minScore:
             score1+=1
     score2=0
     for i in range(amplCols.shape[0]):
@@ -527,22 +527,23 @@ def calc_pValue(patRow,
                            amplCols.shape[1])):
             if amplCols[i,j]<=args.delTh2 and inDel==0:
                 score+=4-amplCols[i,j]
-                if patRow[j]>args.delTh1: moreThanThreshNum+=1
+                if amplCols[i,j]>args.delTh1:
+                    moreThanThreshNum+=1
             elif amplCols[i,j]>=args.duplTh2 and inDel==1:
                 score+=amplCols[i,j]
-                if patRow[j]<args.duplTh1: moreThanThreshNum+=1
+                if amplCols[i,j]<args.duplTh1:
+                    moreThanThreshNum+=1
         score/=args.delTh1**(moreThanThreshNum/len(amplNums))
-        if score>=minScore-args.delta*minScore:
+        if score>=minScore:
             score2+=1
     try:
-        pValue=min(1,round(score1/permNum1,9)+round(score2/amplCols.shape[0],9))
+        pValue=min(1,score1/permNum1)+score2/initAmplColSize
     except ZeroDivisionError:
         print('ERROR (3)! Some value in divider is zero:')
         print('permNum1:',permNum1)
         print('amplCols:',amplCols)
         print('amplCols shape:',amplCols.shape)
         exit(3)
-##    pValue=min(1,round((score1+score2)/(permNum1+amplCols.shape[0]),6))
     return(pValue)
 
 # Converts some list to list of ranges
