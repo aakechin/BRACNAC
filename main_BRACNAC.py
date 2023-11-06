@@ -67,8 +67,7 @@ class BRACNACmain(QtWidgets.QMainWindow, mainwindow.Ui_BRACNAC):
                                            float(self.delTh1_text.text()),
                                            float(self.delTh2_text.text()),
                                            float(self.duplTh1_text.text()),
-                                           float(self.duplTh2_text.text()),
-                                           float(self.delta_text.text()))
+                                           float(self.duplTh2_text.text()))
         self.bracnacObject.moveToThread(self.thread)
         self.thread.started.connect(self.bracnacObject.run)
         self.bracnacObject.finished.connect(self.thread.quit)
