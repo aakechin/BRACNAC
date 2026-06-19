@@ -55,7 +55,7 @@ class BRACNAC(QObject):
             print('ERROR! Reference genome can be only "hg19" or "hg38"')
             exit(1)
         # Getting CDS coordinates
-        brca1exons,brca2exons,posToExon1,posToExon2=getExonCoordinates()
+        brca1exons,brca2exons,posToExon1,posToExon2=getExonCoordinates(version=self.refVersion)
 
         # Getting patient table
         if self.patFile:
@@ -88,6 +88,10 @@ class BRACNAC(QObject):
         data3,normCovPatients,medianCovs=inputData[:3]
         lowCovAmplicons,maxi,maxj,colNames,sampleNames=inputData[3:8]
         dirName,outFilePart,minYs,maxYs,allValVars=inputData[8:]
+
+        # Create direcotry for output CNV tables
+        CNVTable_dirpath = f'{dirName}/CNV_tables'
+        os.makedirs(CNVTable_dirpath, exist_ok=True)
 
         # Create file for output
         wb,ws,f0,f1=createOutputFile(self.outFile,
@@ -140,7 +144,8 @@ class BRACNAC(QObject):
                                              exonToAmpls,
                                              amplToIntron,
                                              brca1AmpliconNum,
-                                             step,self)
+                                             step,self,
+                                             CNVTable_dirpath)
 
                     if step==1:
                         plotTitle,newCols,ampliconsColor=detectCnvOut
